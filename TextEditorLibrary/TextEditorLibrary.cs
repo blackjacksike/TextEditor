@@ -1,12 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 
 namespace TextEditorLibrary
 {
     public class TextFile
     {
         private string fileName, folderPath, filePath, content;
-
+        private StringBuilder sb = new StringBuilder();
+        
         public bool IsRightType()
         {
             if (Path.GetExtension(filePath) == ".txt")
@@ -48,8 +50,7 @@ namespace TextEditorLibrary
 
         public void EditFile()
         {
-            /* First problem: Editing a file can also mean creating a file [Solved]. Second problem: You can only edit one line of text.
-            Third problem: You can't list all files within a folder. */
+            /* Third problem: You can't list all files within a folder. */
             
             try
             {
@@ -62,7 +63,17 @@ namespace TextEditorLibrary
                 if (File.Exists(filePath) == true && IsRightType() == true) // if the file exists and is the right type, then you can edit it.
                 {
                     Console.WriteLine("Please enter whatever you like.");
-                    content = Console.ReadLine();
+                    while(true)
+                    {
+                        if (Console.ReadKey().Key == ConsoleKey.End)
+                        {
+                            break;
+                        }
+
+                        sb.AppendLine(Console.ReadLine());
+                        content = sb.ToString();
+                    }
+
                     File.WriteAllText(filePath, content);
                 }
                 else if (File.Exists(filePath) == true) // if the file exists, that means that it simply wasn't the right type.
