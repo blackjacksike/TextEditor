@@ -15,7 +15,7 @@ namespace TextEditorLibrary
             {
                 return true;
             }
-            else 
+            else
             {
                 return false;
             }
@@ -23,8 +23,6 @@ namespace TextEditorLibrary
         
         public void CreateFile()
         {
-            /* First problem: You could create any type of file, not only *.txt. [Solved] */
-
             try
             {
                 Console.WriteLine("Where do you want to create your text file?");
@@ -65,13 +63,15 @@ namespace TextEditorLibrary
                     Console.WriteLine("Please enter whatever you like.");
                     while(true)
                     {
-                        if (Console.ReadKey().Key == ConsoleKey.End)
-                        {
-                            break;
-                        }
-
                         sb.AppendLine(Console.ReadLine());
                         content = sb.ToString();
+
+                        if (content.Contains("$end") == true) // if the string contains the command '$end'...
+                        {
+                            sb = sb.Remove(content.IndexOf("$end"), sb.Length - content.IndexOf("$end")); // then remove the first occurence command and everything following it
+                            content = sb.ToString();
+                            break;
+                        }
                     }
 
                     File.WriteAllText(filePath, content);
